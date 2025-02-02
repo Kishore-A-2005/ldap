@@ -5,33 +5,36 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Authenticate from "@/actions/authenticate"
+import { useRouter } from "next/navigation"
 
 function SignInPage() {
+  const router = useRouter()
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [errorMessage, setErrorMessage] = useState("")
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault() // Prevent form default behavior
+    e.preventDefault() 
 
     setLoading(true)
-    setErrorMessage("") // Clear any previous error messages
+    setErrorMessage("") 
 
     try {
-      // Await the authentication response
       const response = await Authenticate({ email: username, password })
       
       if (response.status) {
+        localStorage.setItem("email", username);
         alert("Signed in successfully!")
+        router.push("/dashboard")
       } else {
-        setErrorMessage(response.message) // Set error message if authentication fails
+        setErrorMessage(response.message) 
       }
 
-      console.log(response) // Log the response for debugging
+      console.log(response) 
     } catch (error) {
       setErrorMessage("An error occurred during authentication.")
-      console.error(error) // Log any unexpected errors
+      console.error(error) 
     } finally {
       setLoading(false)
     }

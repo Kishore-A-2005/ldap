@@ -1,17 +1,16 @@
+"use server"
+
 import { PrismaClient } from "@prisma/client"
 
 const db = new PrismaClient()
 
 export default async function Authenticate({ email, password }: { email: string, password: string }) {
   try {
-    console.log("Authenticating with email:", email) // Ensure the email is logged
-
-    // Fetch the user from the database
+    console.log("Authenticating with email:", email) 
     const user = await db.loginDetails.findUnique({
       where: { email },
     })
 
-    // Check if user exists and password matches
     if (user && user.password === password) {
       console.log("Authentication successful")
       return {
